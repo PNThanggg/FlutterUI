@@ -1,0 +1,46 @@
+part of spritewidget;
+
+/// A widget that uses a [SpriteBox] to render a sprite node tree to the screen.
+class SpriteWidget extends SingleChildRenderObjectWidget {
+  /// The rootNode of the sprite node tree.
+  ///
+  ///     var node = mySpriteWidget.rootNode;
+  final NodeWithSize rootNode;
+
+  /// The transform mode used to fit the sprite node tree to the size of the widget.
+  final SpriteBoxTransformMode transformMode;
+
+  /// Creates a new sprite widget with [rootNode] as its content.
+  ///
+  /// The widget will setup the coordinate space for the sprite node tree using
+  /// the size of the [rootNode] in combination with the supplied
+  /// [transformMode]. By default the letterbox transform mode is used. See
+  /// [SpriteBoxTransformMode] for more details on the different modes.
+  ///
+  /// The most common way to setup the sprite node graph is to subclass
+  /// [NodeWithSize] and pass it to the sprite widget. In the custom subclass
+  /// it's possible to build the node graph, do animations and handle user
+  /// events.
+  ///
+  ///     var mySpriteTree = MyCustomNodeWithSize();
+  ///     var mySpriteWidget =
+  ///       SpriteWidget(mySpriteTree, SpriteBoxTransformMode.fixedHeight);
+  const SpriteWidget(
+    this.rootNode, {
+    this.transformMode = SpriteBoxTransformMode.letterbox,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  SpriteBox createRenderObject(BuildContext context) => SpriteBox(
+        rootNode: rootNode,
+        transformMode: transformMode,
+      );
+
+  @override
+  void updateRenderObject(BuildContext context, SpriteBox renderObject) {
+    renderObject
+      ..rootNode = rootNode
+      ..transformMode = transformMode;
+  }
+}
